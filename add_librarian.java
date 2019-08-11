@@ -1,0 +1,212 @@
+package com.lms;
+
+
+import java.sql.*;
+import java.util.*;
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.JPasswordField;
+
+
+public class add_librarian extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField textField;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
+	private JTextField textField_6;
+	private JPasswordField passwordField;
+
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					add_librarian frame = new add_librarian();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	
+	public add_librarian() 
+	{
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 522, 536);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		textField = new JTextField();
+		textField.setBounds(167, 96, 213, 26);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(167, 179, 213, 26);
+		contentPane.add(textField_2);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBounds(167, 226, 213, 26);
+		contentPane.add(textField_3);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		textField_4.setBounds(167, 272, 213, 26);
+		contentPane.add(textField_4);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		textField_5.setBounds(167, 315, 213, 26);
+		contentPane.add(textField_5);
+		
+		JButton btnNewButton = new JButton("Add Librarian");
+		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				int id;
+				long ph;
+				Random rand=new Random();
+				do
+				{
+				id=rand.nextInt();
+				}while(id<0);
+				String name,urname,pass,email,add,city,phone;	
+				name=textField_6.getText();
+				urname=textField.getText();
+				pass=new String(passwordField.getPassword());
+				email=textField_2.getText();
+				add=textField_3.getText();
+				city=textField_4.getText();
+				phone=textField_5.getText();
+				ph=Long.parseLong(phone);
+				try
+				{
+				  Class.forName("com.mysql.cj.jdbc.Driver");
+		          Connection conn=DriverManager.getConnection("jdbc:mysql://localhost/library?useSSL=false","root","root123");
+		          Statement stmt=conn.createStatement();
+                  String table="Create table if not exists Librarian (Librarian_Id int not null,Name varchar(30),Username varchar(30),Password varchar(30),Email varchar(30),Address varchar(70),City varchar(20),Phone long not null,primary key (Librarian_Id))";
+                  stmt.executeUpdate(table);
+                  String ins="Insert into Librarian values(?,?,?,?,?,?,?,?)";
+                  PreparedStatement pstmt=conn.prepareStatement(ins);
+                  pstmt.setInt(1,id);
+                  pstmt.setString(2,name);
+                  pstmt.setString(3,urname);
+                  pstmt.setString(4,pass);
+                  pstmt.setString(5,email);
+                  pstmt.setString(6,add);
+                  pstmt.setString(7,city);
+                  pstmt.setLong(8,ph);
+                  pstmt.executeUpdate();
+                  JOptionPane.showMessageDialog(null,"Librarian Added Suceesfully","Message",JOptionPane.INFORMATION_MESSAGE);    
+                  textField.setText(null);
+                  textField_2.setText(null);
+                  textField_3.setText(null);
+                  textField_4.setText(null);
+                  textField_5.setText(null);
+                  textField_6.setText(null);
+                  passwordField.setText(null);
+				}
+				catch(Exception e1)
+				{
+				 System.out.println(e1);
+				}
+				
+			}
+		});
+		btnNewButton.setBounds(194, 365, 144, 40);
+		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Back");
+		btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				admin a=new admin();
+				a.setVisible(true);
+				a.setLocationRelativeTo(null);
+				a.setTitle("Admin");
+				setVisible(false);
+			}
+		});
+		btnNewButton_1.setBounds(226, 436, 89, 26);
+		contentPane.add(btnNewButton_1);
+		
+		JLabel lblName = new JLabel("USERNAME");
+		lblName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblName.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblName.setBounds(41, 98, 96, 20);
+		contentPane.add(lblName);
+		
+		JLabel lblPassword = new JLabel("PASSWORD");
+		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblPassword.setBounds(41, 139, 96, 20);
+		contentPane.add(lblPassword);
+		
+		JLabel lblEmail = new JLabel("EMAIL");
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblEmail.setBounds(41, 185, 96, 20);
+		contentPane.add(lblEmail);
+		
+		JLabel lblAddress = new JLabel("ADDRESS");
+		lblAddress.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAddress.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblAddress.setBounds(41, 232, 96, 20);
+		contentPane.add(lblAddress);
+		
+		JLabel lblCity = new JLabel("CITY");
+		lblCity.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCity.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblCity.setBounds(41, 278, 96, 20);
+		contentPane.add(lblCity);
+		
+		JLabel lblContactNumber = new JLabel("CONTACT NUMBER\r\n");
+		lblContactNumber.setHorizontalAlignment(SwingConstants.CENTER);
+		lblContactNumber.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblContactNumber.setBounds(10, 316, 147, 20);
+		contentPane.add(lblContactNumber);
+		
+		JLabel lblAddLibrarian = new JLabel("ADD LIBRARIAN");
+		lblAddLibrarian.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAddLibrarian.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		lblAddLibrarian.setBounds(167, 0, 179, 31);
+		contentPane.add(lblAddLibrarian);
+		
+		textField_6 = new JTextField();
+		textField_6.setColumns(10);
+		textField_6.setBounds(167, 57, 213, 26);
+		contentPane.add(textField_6);
+		
+		JLabel label = new JLabel("NAME");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
+		label.setFont(new Font("Dialog", Font.BOLD, 14));
+		label.setBounds(58, 59, 68, 20);
+		contentPane.add(label);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(167, 134, 213, 25);
+		contentPane.add(passwordField);
+		
+	}
+}
